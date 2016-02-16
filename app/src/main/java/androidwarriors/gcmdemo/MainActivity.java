@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements TAG {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 Log.d("Registration id", registrationId);
-                Toast.makeText(MainActivity.this, registrationId, Toast.LENGTH_SHORT).show();
                 if (isNewRegistration) {
                     onRegisterGcm(registrationId);
                 }

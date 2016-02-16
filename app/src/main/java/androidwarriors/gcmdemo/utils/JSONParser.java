@@ -108,7 +108,7 @@ public class JSONParser implements TAG {
 
     public static JSONObject REG_GCM(String url1, String regid) throws Exception {
         StringBuilder result = new StringBuilder();
-        URL url = new URL(regid);
+        URL url = new URL(url1);
         Map<String, Object> params = new LinkedHashMap<>();
         params.put(REGID, regid);
 
