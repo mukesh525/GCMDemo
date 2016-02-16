@@ -169,7 +169,7 @@ public class GCMClientManager {
             // If there is an error, don't just keep trying to register.
             // Require the user to click a button again, or perform
             // exponential back-off.
-            Log.e(TAG, ex);
+            Log.e(TAG, ex+"   error");
         }
     }
 }

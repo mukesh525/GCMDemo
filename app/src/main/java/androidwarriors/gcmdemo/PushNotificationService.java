@@ -21,6 +21,7 @@ public class PushNotificationService extends GcmListenerService{
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
         //createNotification(mTitle, push_msg);
+        sendNotification(message);
     }
     private void sendNotification(String msg) {
         Log.d(TAG, "Preparing to send notification...: " + msg);

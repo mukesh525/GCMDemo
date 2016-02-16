@@ -262,21 +262,7 @@ public class Utils implements TAG {
         }
     }
 
-    public static Boolean isLogin(Context context) {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String authKey = sharedPrefs.getString(AUTHKEY, "n");
-        String empName = sharedPrefs.getString(NAME, "n");
-        String empEmail = sharedPrefs.getString(EMAIL, "n");
-
-
-        if (authKey.equals("n") && empName.equals("n") && empEmail.equals("n")) {
-            return false;
-        } else {
-            return true;
-        }
-
-    }
 
     public static boolean isEmpty(String msg) {
         return msg.trim().equals("")

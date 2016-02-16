@@ -24,13 +24,12 @@ public class MainActivity extends AppCompatActivity implements TAG {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         GCMClientManager pushClientManager = new GCMClientManager(this, PROJECT_NUMBER);
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-
                 Log.d("Registration id", registrationId);
+                Toast.makeText(MainActivity.this, registrationId, Toast.LENGTH_SHORT).show();
                 if (isNewRegistration) {
                     onRegisterGcm(registrationId);
                 }
@@ -54,10 +53,8 @@ public class MainActivity extends AppCompatActivity implements TAG {
     }
 
     class RegisterGcm extends AsyncTask<Void, Void, String> {
-        String message = "n";
-        String code = "n";
         JSONObject response = null;
-        String authkey, regid;
+        String regid, code;
 
         public RegisterGcm(String regid) {
             this.regid = regid;
