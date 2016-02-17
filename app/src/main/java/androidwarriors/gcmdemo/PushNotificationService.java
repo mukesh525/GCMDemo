@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 
 
 public class PushNotificationService extends GcmListenerService {
@@ -26,41 +28,51 @@ public class PushNotificationService extends GcmListenerService {
     private NotificationManager mNotificationManager;
     public static int NOTIFICATION_ID = 1;
     private String TAG = "GCMPRO";
+    private String url;
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
+        url = data.getString("img");
         sendNotification(message);
 
     }
 
     private void sendNotification(String msg) {
-        //Create notification object and set the content.
-        NotificationCompat.Builder nb = new NotificationCompat.Builder(this);
-        nb.setSmallIcon(R.drawable.ic_backup);
-        nb.setContentTitle("Set your title");
-        nb.setContentText("Set Content text");
-        nb.setTicker("Set Ticker text");
-        nb.setContentText(msg);
-
-        //get the bitmap to show in notification bar
-        // Bitmap bitmap_image = BitmapFactory.decodeResource(this.getResources(), R.drawable.drawerr);
-        Bitmap bitmap_image = getBitmapFromURL("http://images.landscapingnetwork.com/pictures/images/500x500Max/front-yard-landscaping_15/front-yard-hillside-banyon-tree-design-studio_1018.jpg");
-        NotificationCompat.BigPictureStyle s = new NotificationCompat.BigPictureStyle().bigPicture(bitmap_image);
-        s.setSummaryText("Summary text appears on expanding the notification");
-        nb.setStyle(s);
-
         Intent resultIntent = new Intent(this, MainActivity.class);
         TaskStackBuilder TSB = TaskStackBuilder.create(this);
         TSB.addParentStack(MainActivity.class);
-
-        // Adds the Intent that starts the Activity to the top of the stack
         TSB.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
                 TSB.getPendingIntent(
                         0,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
+
+        //Create notification object and set the content.
+        NotificationCompat.Builder nb = new NotificationCompat.Builder(this);
+        nb.setSmallIcon(R.drawable.ic_backup);
+        nb.setContentTitle("Set your title");
+        nb.setContentText("Set Content text");
+        nb.setTicker("Set Ticker text");
+        nb.addAction(R.drawable.ic_share_24dp, "Share", resultPendingIntent);
+      //  nb.setContent(new RemoteViews(new Tex))
+        nb.setContentText(msg);
+
+        //get the bitmap to show in notification bar
+        // Bitmap bitmap_image = BitmapFactory.decodeResource(this.getResources(), R.drawable.drawerr);
+        // Bitmap bitmap_image = getBitmapFromURL("http://images.landscapingnetwork.com/pictures/images/500x500Max/front-yard-landscaping_15/front-yard-hillside-banyon-tree-design-studio_1018.jpg");
+        Bitmap bitmap_image = getBitmapFromURL(url);
+        NotificationCompat.BigPictureStyle s = new NotificationCompat.BigPictureStyle().bigPicture(bitmap_image);
+        s.setSummaryText("Summary text appears on expanding the notification");
+        nb.setStyle(s);
+
+//        Intent resultIntent = new Intent(this, MainActivity.class);
+//        TaskStackBuilder TSB = TaskStackBuilder.create(this);
+//        TSB.addParentStack(MainActivity.class);
+
+        // Adds the Intent that starts the Activity to the top of the stack
+
 
         nb.setContentIntent(resultPendingIntent);
         nb.setAutoCancel(true);
