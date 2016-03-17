@@ -32,11 +32,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-
 /**
  * Created by mukesh on 6/7/15.
  */
 public class Utils implements TAG {
+
+    private boolean isMyServiceRunning(Class<?> serviceClass, Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public static ArrayList<String> sortArray(ArrayList<String> al) {
         Comparator<String> nameComparator = new Comparator<String>() {
@@ -247,7 +257,6 @@ public class Utils implements TAG {
     }
 
 
-
     public static boolean contains(JSONObject jsonObject, String key) {
         return jsonObject != null && jsonObject.has(key) && !jsonObject.isNull(key) ? true : false;
     }
@@ -261,7 +270,6 @@ public class Utils implements TAG {
             return defaultValue;
         }
     }
-
 
 
     public static boolean isEmpty(String msg) {

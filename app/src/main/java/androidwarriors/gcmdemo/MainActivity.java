@@ -25,8 +25,11 @@ public class MainActivity extends AppCompatActivity implements TAG {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        cancelNotification(this,0);
-       GCMClientManager pushClientManager = new GCMClientManager(this, PROJECT_NUMBER);
+//       if(Utils.isMyServiceRunning(MyService.class,MainActivity.this){
+//
+//        }
+        cancelNotification(this, 0);
+        GCMClientManager pushClientManager = new GCMClientManager(this, PROJECT_NUMBER);
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
@@ -105,4 +108,7 @@ public class MainActivity extends AppCompatActivity implements TAG {
 
 
     }
+
+
+
 }
