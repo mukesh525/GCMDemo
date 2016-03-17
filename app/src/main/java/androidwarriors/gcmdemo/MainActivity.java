@@ -1,5 +1,7 @@
 package androidwarriors.gcmdemo;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
@@ -23,8 +25,8 @@ public class MainActivity extends AppCompatActivity implements TAG {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        GCMClientManager pushClientManager = new GCMClientManager(this, PROJECT_NUMBER);
+        cancelNotification(this,0);
+       GCMClientManager pushClientManager = new GCMClientManager(this, PROJECT_NUMBER);
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
@@ -40,7 +42,11 @@ public class MainActivity extends AppCompatActivity implements TAG {
             }
         });
     }
-
+    public static void cancelNotification(Context ctx, int notifyId) {
+        String ns = Context.NOTIFICATION_SERVICE;
+        NotificationManager nMgr = (NotificationManager) ctx.getSystemService(ns);
+        nMgr.cancel(notifyId);
+    }
     public void onRegisterGcm(final String regid) {
 
         if (Utils.onlineStatus2(MainActivity.this)) {
