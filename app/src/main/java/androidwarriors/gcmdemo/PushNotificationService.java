@@ -1,18 +1,16 @@
 package androidwarriors.gcmdemo;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
-import android.widget.RemoteViews;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -20,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Date;
 
 
 public class PushNotificationService extends GcmListenerService {
@@ -33,8 +30,10 @@ public class PushNotificationService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
+
         url = data.getString("img");
-        sendNotification(message);
+      //  sendNotification(message);
+        sendStickyNotification(message);
 
     }
 
@@ -56,7 +55,7 @@ public class PushNotificationService extends GcmListenerService {
         nb.setContentText("Set Content text");
         nb.setTicker("Set Ticker text");
         nb.addAction(R.drawable.ic_share_24dp, "Share", resultPendingIntent);
-      //  nb.setContent(new RemoteViews(new Tex))
+        //  nb.setContent(new RemoteViews(new Tex))
         nb.setContentText(msg);
 
         //get the bitmap to show in notification bar
@@ -97,5 +96,40 @@ public class PushNotificationService extends GcmListenerService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private void sendNotification1(String message) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_backup)
+                .setContentTitle("GCM Message")
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendStickyNotification(String message) {
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_backup)
+                .setContentTitle("title")
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentText(message)
+                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0));
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, mBuilder.build());
     }
 }
